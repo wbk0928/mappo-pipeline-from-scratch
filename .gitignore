@@ -7,20 +7,28 @@ mappo_venv/
 venv/
 .venv/
 
+# ----------------------------
+# Experiment outputs
+# ----------------------------
 
-# Ignore all experiments
-experiments/*
+# Ignore all experiment runs
+experiments/simple_spread_v3/*
 
-# Keep the best trained model
-!experiments/simple_spread_v3/
+# Keep the reference experiment
 !experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341/
-!experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341/**
 
+# Ignore TensorBoard logs
+**/tensorboard/
 
-# Ignore TensorBoard logs inside the reference experiment
-experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341/tensorboard/
+# Ignore intermediate checkpoints
+**/checkpoints/checkpoint_*.pt
 
+# Keep the best checkpoint
+!**/checkpoints/best_model.pt
+
+# ----------------------------
 # TensorBoard
+# ----------------------------
 runs/
 
 # macOS
