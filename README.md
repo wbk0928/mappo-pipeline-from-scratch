@@ -1,8 +1,8 @@
-# MAPPO for PettingZoo Simple Spread
+# MAPPO Pipeline from Scratch
 
-A clean and modular implementation of **Multi-Agent Proximal Policy Optimization (MAPPO)** in **PyTorch** for the **PettingZoo MPE2 Simple Spread** environment.
+A clean, modular, and extensible implementation of **Multi-Agent Proximal Policy Optimization (MAPPO)** in **PyTorch** for the **PettingZoo MPE2 Simple Spread** environment.
 
-The project follows the **Centralized Training, Decentralized Execution (CTDE)** paradigm and is intended for learning, experimentation, and future research on cooperative multi-agent reinforcement learning.
+This project follows the **Centralized Training, Decentralized Execution (CTDE)** paradigm and was developed from scratch to understand the complete MAPPO training pipeline. It serves as a foundation for future research on communication-based multi-agent reinforcement learning.
 
 ---
 
@@ -20,72 +20,63 @@ The project follows the **Centralized Training, Decentralized Execution (CTDE)**
 - ✅ TensorBoard logging
 - ✅ Automatic checkpoint saving
 - ✅ Evaluation utilities
-- ✅ CSV evaluation reports
 - ✅ Human rendering of trained policies
+- ✅ CSV evaluation reports
 - ✅ Modular and extensible codebase
+- ✅ Reference trained model included
 
 ---
 
-## Repository Structure
+# Repository Structure
 
 ```text
 .
 ├── configs/
 │   └── simple_spread.yaml
-│___ experiments
-|     |__simple_spread
-|         |-checkpoints
-|         |-tensorboards
-|
-|
+│
+├── experiments/
+│   └── simple_spread_v3/
+│       └── reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341/
+│           ├── checkpoints/
+│           │   └── best_model.pt
+│           ├── config.yaml
+│           ├── evaluation_results.csv
+│           ├── summary.txt
+│           └── README.md
+│
 ├── src/
-│   ├── algorithms/
-│   ├── buffers/
-│   ├── config/
-│   ├── envs/
-│   ├── networks/
-│   ├── trainers/
-│   └── utils/
+│   └── mappo_ss/
+│       ├── algorithms/
+│       ├── buffers/
+│       ├── communication/
+│       ├── config/
+│       ├── envs/
+│       ├── networks/
+│       ├── trainers/
+│       └── utils/
+│
+├── tests/
 │
 ├── train.py
 ├── evaluate.py
 ├── play.py
 ├── pyproject.toml
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## Installation
+# Requirements
 
-### 1. Clone the repository
+- Python 3.11+
+- PyTorch
+- PettingZoo
+- MPE2
+- Gymnasium
+- TensorBoard
 
-```bash
-git clone https://github.com/AkArun12/mappo-simple-spread.git
-cd mappo-simple-spread
-```
-
-### 2. Create a virtual environment
-
-```bash
-python -m venv mappo_venv
-```
-
-### 3. Activate the environment
-
-#### macOS / Linux
-
-```bash
-source mappo_venv/bin/activate
-```
-
-#### Windows
-
-```powershell
-mappo_venv\Scripts\activate
-```
-
-### 4. Install dependencies
+All dependencies are automatically installed using
 
 ```bash
 pip install -e .
@@ -93,7 +84,44 @@ pip install -e .
 
 ---
 
-## Training
+# Installation
+
+## 1. Clone the repository
+
+```bash
+git clone https://github.com/AkArun12/mappo-pipeline-from-scratch.git
+cd mappo-pipeline-from-scratch
+```
+
+## 2. Create a virtual environment
+
+```bash
+python -m venv mappo_venv
+```
+
+## 3. Activate the environment
+
+### macOS / Linux
+
+```bash
+source mappo_venv/bin/activate
+```
+
+### Windows
+
+```powershell
+mappo_venv\Scripts\activate
+```
+
+## 4. Install the project
+
+```bash
+pip install -e .
+```
+
+---
+
+# Training
 
 Start training with
 
@@ -101,7 +129,7 @@ Start training with
 python train.py
 ```
 
-Each training run creates a new experiment directory:
+Each training run automatically creates a new experiment directory.
 
 ```text
 experiments/
@@ -111,7 +139,7 @@ experiments/
     └── config.yaml
 ```
 
-Monitor training with TensorBoard:
+Visualize training using TensorBoard
 
 ```bash
 tensorboard --logdir experiments
@@ -119,9 +147,9 @@ tensorboard --logdir experiments
 
 ---
 
-## Evaluation
+# Evaluation
 
-Evaluate a trained checkpoint:
+Evaluate a trained checkpoint
 
 ```bash
 python evaluate.py experiments/<run_name>
@@ -132,9 +160,13 @@ Evaluation automatically generates
 - `evaluation_results.csv`
 - `summary.txt`
 
-Example output:
+Example output
 
 ```text
+============================================================
+Evaluation Summary
+============================================================
+
 Average Reward : -23.13
 Std Reward     : 5.52
 Best Reward    : -10.85
@@ -143,22 +175,30 @@ Worst Reward   : -36.41
 
 ---
 
-## Play
+# Play
 
-Render the trained policy:
+Render a trained policy
 
 ```bash
 python play.py experiments/<run_name> --episodes 5
 ```
 
+Example
+
+```bash
+python play.py \
+experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341 \
+--episodes 5
+```
+
 ---
 
-## Hyperparameter Search
+# Hyperparameter Search
 
 The following hyperparameters were explored during experimentation.
 
-| Hyperparameter | Values |
-|----------------|--------|
+| Hyperparameter | Values Explored |
+|----------------|-----------------|
 | Learning Rate | 3e-4, 1e-4 |
 | PPO Clip Ratio | 0.20, 0.15 |
 | Entropy Coefficient | 0.005, 0.01, 0.02 |
@@ -168,9 +208,9 @@ The following hyperparameters were explored during experimentation.
 
 ---
 
-## Best Configuration
+# Best Configuration
 
-The best-performing configuration obtained during tuning:
+The following configuration achieved the best evaluation performance.
 
 | Parameter | Value |
 |-----------|-------|
@@ -183,46 +223,122 @@ The best-performing configuration obtained during tuning:
 
 ---
 
-## Method
+# Evaluation Results
 
-The implementation follows the **Centralized Training, Decentralized Execution (CTDE)** framework.
+Reference model performance over **100 evaluation episodes**.
 
-During training:
-
-- Each agent shares the same actor network.
-- A centralized critic receives the global state.
-- Advantages are estimated using Generalized Advantage Estimation (GAE).
-- Policies are updated using the PPO clipped objective.
-
-During execution:
-
-- Agents act independently using only their local observations.
+| Metric | Value |
+|---------|-------|
+| Average Reward | **-23.13** |
+| Standard Deviation | **5.52** |
+| Best Episode | **-10.85** |
+| Worst Episode | **-36.41** |
 
 ---
 
-## Future Work
+# Reference Trained Model
 
-Potential extensions include:
+A fully trained reference model is included in
 
-- Agent communication
-- Speaker–Listener environment
+```text
+experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341/
+```
+
+Contents include
+
+- `best_model.pt`
+- `config.yaml`
+- `evaluation_results.csv`
+- `summary.txt`
+- `README.md`
+
+You can evaluate it immediately without retraining.
+
+```bash
+python evaluate.py \
+experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341
+```
+
+---
+
+# Method
+
+This implementation follows the **Centralized Training, Decentralized Execution (CTDE)** framework.
+
+### During Training
+
+- Shared actor network across all agents
+- Centralized critic receives the global state
+- Advantages computed using Generalized Advantage Estimation (GAE)
+- PPO clipped objective for stable policy updates
+- Entropy regularization encourages exploration
+
+### During Execution
+
+- Only the trained actor is used
+- Each agent acts independently
+- Decisions are based solely on local observations
+
+---
+
+# Roadmap
+
+Current progress
+
+- ✅ MAPPO implementation
+- ✅ Training pipeline
+- ✅ Evaluation pipeline
+- ✅ Hyperparameter tuning
+- ✅ Reference trained model
+- ⏳ Communication module
+- ⏳ Speaker–Listener environment
+- ⏳ Graph Neural Network communication
+- ⏳ Transformer-based MARL
+- ⏳ SMAC benchmark support
+
+---
+
+# Future Work
+
+Potential extensions include
+
+- Explicit agent communication
 - Learned message passing
 - Attention-based communication
-- Graph Neural Networks (GNNs)
-- Transformer-based MARL
-- SMAC benchmark support
+- Graph Neural Networks
+- Transformer policies
+- Recurrent MAPPO
+- Additional PettingZoo environments
+- StarCraft Multi-Agent Challenge (SMAC)
 
 ---
 
-## References
+# References
 
-- Schulman et al. (2017), **Proximal Policy Optimization Algorithms**
-- Yu et al. (2022), **The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games**
-- PettingZoo
-- MPE2
+1. Schulman et al. (2017). **Proximal Policy Optimization Algorithms.**
+
+2. Yu et al. (2022). **The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games.**
+
+3. PettingZoo: Multi-Agent Reinforcement Learning Environments.
+
+4. MPE2 (Multi-Agent Particle Environments).
 
 ---
 
-## Author
+# License
 
-Arun Kathariya
+
+
+---
+
+# Acknowledgements
+
+This project builds upon ideas introduced in PPO and MAPPO and uses the PettingZoo MPE2 environments for benchmarking cooperative multi-agent reinforcement learning algorithms.
+
+---
+
+# Author
+
+**Arun Kathariya**
+
+GitHub: https://github.com/AkArun12
