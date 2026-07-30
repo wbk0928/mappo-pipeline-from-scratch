@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+mappo_venv/
+.venv/
+venv/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Experiments
+experiments/simple_spread_v3/*
+
+# TensorBoard
+runs/
+
+# Checkpoints
+*.pt
+*.pth
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
