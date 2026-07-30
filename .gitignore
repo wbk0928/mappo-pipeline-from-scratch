@@ -1,41 +1,30 @@
-# Python
+# Python cache
 __pycache__/
 *.py[cod]
-*.so
 
 # Virtual environments
 mappo_venv/
-.venv/
 venv/
+.venv/
 
-# Build
-build/
-dist/
-*.egg-info/
 
-# IDE
-.vscode/
-.idea/
+# Ignore all experiments
+experiments/*
 
-# macOS
-.DS_Store
+# Keep the best trained model
+!experiments/simple_spread_v3/
+!experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341/
+!experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341/**
 
-# Logs
-*.log
 
-# Experiments
-experiments/simple_spread_v3/*
+# Ignore TensorBoard logs inside the reference experiment
+experiments/simple_spread_v3/reference_lr0.0001_clip0.15_ent0.01_ep10_mb16_train30000_seed42_20260729_2341/tensorboard/
 
 # TensorBoard
 runs/
 
-# Checkpoints
-*.pt
-*.pth
+# macOS
+.DS_Store
 
-# Pytest
-.pytest_cache/
-
-# Coverage
-.coverage
-htmlcov/
+# VS Code
+.vscode/
