@@ -4,7 +4,7 @@ Generic PettingZoo environment wrapper.
 Currently supports:
     - simple_spread_v3 (MPE2)
 
-Designed for CTDE (Centralized Training, Decentralized Execution).
+Designed for CTDE (Centralized Training, Decentralized Execution).设计目标是为了 CTDE（集中训练、分散执行）模式
 """
 
 from __future__ import annotations
