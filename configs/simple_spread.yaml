@@ -11,7 +11,13 @@ environment:
   # null for training
   # human only for evaluation/play
   render_mode: null
-
+"""
+env_name：使用的多智能体环境 ID，这里为 simple_spread_v3，属于 MPE2 粒子环境，智能体需要合作覆盖不同的地标。
+num_agents：环境中智能体的数量，对应 N 参数。
+max_cycles：每个 episode 最多执行的环境步数（一个 while 循环的上限）。
+continuous_actions：动作空间类型，若为 false 则动作是离散的；目前代码只支持离散动作。
+render_mode：渲染模式，训练时通常设为 null（不渲染）以提高速度；评估或可视化时可设为 "human"
+"""
 # ==========================================================
 # Networks
 # ==========================================================
@@ -19,7 +25,10 @@ environment:
 network:
   actor_hidden_dim: 128
   critic_hidden_dim: 128
-
+"""
+actor_hidden_dim：策略网络（Actor）的隐藏层大小，这里为 128。
+critic_hidden_dim：价值网络（Critic）的隐藏层大小，这里也是 128。
+"""
 # ==========================================================
 # MAPPO
 # ==========================================================
@@ -39,7 +48,17 @@ algorithm:
   value_coef: 0.5
 
   max_grad_norm: 0.5
-
+"""
+gamma：折扣因子，衡量未来奖励的重要性，越接近 1 越注重长期回报。
+gae_lambda：广义优势估计中的 λ，平衡偏差和方差，常用 0.95~0.99。
+clip_ratio：PPO 目标函数中重要性采样的裁剪阈值，典型值为 0.1~0.3。
+learning_rate：优化器学习率。
+ppo_epochs：对收集的一批数据（rollout）进行梯度更新的轮数。
+minibatch_size：每次梯度更新时使用的小批量样本数量。
+entropy_coef：熵正则项的系数，用于鼓励探索，避免策略过早收敛。
+value_coef：值函数损失在总损失中的权重。
+max_grad_norm：梯度裁剪的最大范数，防止梯度爆炸。
+"""
 # ==========================================================
 # Training
 # ==========================================================
@@ -53,7 +72,13 @@ training:
   num_eval_episodes: 100
 
   resume_checkpoint: null
-
+"""
+total_episodes：训练过程运行的总 episode 数。
+rollout_length：在一个 rollout 阶段中与环境交互的步数，也对应 max_cycles 的值（可能相同）。
+seed：随机种子，用于保证实验可复现。
+num_eval_episodes：评估时执行多少个 episode 来统计平均回报。
+resume_checkpoint：断点续训，传入检查点路径；null 表示从头开始训练。
+"""
 # ==========================================================
 # Logging
 # ==========================================================
@@ -64,3 +89,10 @@ logging:
   log_every: 10
   tensorboard: true
   debug: false
+  """
+save_every：每隔固定 episode 数保存一次模型权重，防止训练中断丢失进度。
+eval_every：每隔固定 episode 数进行一次完整评估，输出平均回报等指标。
+log_every：每隔固定 episode 数打印一次训练日志（如损失、回报）。
+tensorboard：是否将训练曲线写入 TensorBoard，方便实时监控。
+debug：调试模式开关，开启后会输出更多详细信息，但可能减慢运行速度。
+  """
